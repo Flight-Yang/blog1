@@ -1,6 +1,6 @@
 <template>
   <div id="my">
-    <section class="user-info">
+    <section class="user-info" v-if="user">
       <img :src="user.avatar" :alt="user.username" class="avatar">
       <h3>{{user.username}}</h3>
     </section>
@@ -33,53 +33,51 @@
 
 <script>
   import blog from '@/api/blog'
-  import { mapGetters } from 'vuex'
+  import {mapGetters} from 'vuex'
 
   export default {
-    data () {
+    data() {
       return {
         blogs: [],
         page: 1,
         total: 0
       }
     },
-
-    computed:{
-      ...mapGetters(['user'])
+    computed: {
+      ...mapGetters(['user']),
     },
 
     created() {
+      let userid = localStorage.getItem('userid')
+      console.log('我的'+userid)
       this.page = parseInt(this.$route.query.page) || 1
-      blog.getBlogsByUserId(this.user.id, { page: this.page })
-        .then(res => {
-          console.log('我是id'+this.user.id)
-          this.page = res.page
-          this.total = res.total
-          this.blogs = res.data
-        })
+      blog.getBlogsByUserId(userid, {page: this.page}).then(res => {
+        this.page = res.page
+        this.total = res.total
+        this.blogs = res.data
+      })
     },
+
 
     methods: {
       onPageChange(newPage) {
-        blog.getBlogsByUserId(this.user.id, { page: newPage }).then(res => {
+        blog.getBlogsByUserId(this.user.id, {page: newPage}).then(res => {
           this.blogs = res.data
           this.total = res.total
           this.page = res.page
-          this.$router.push({ path: "/my", query: { page: newPage}})
+          this.$router.push({path: "/my", query: {page: newPage}})
         })
       },
-
       async onDelete(blogId) {
         await this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         })
-        await blog.deleteBlog({ blogId })
+        await blog.deleteBlog({blogId})
         this.$message.success('删除成功')
         this.blogs = this.blogs.filter(blog => blog.id !== blogId)
       },
-
       splitDate(dataStr) {
         let dateObj = typeof dataStr === 'object' ? dataStr : new Date(dataStr)
         return {
@@ -92,15 +90,13 @@
   }
 </script>
 
-<style lang="less" >
+<style lang="less">
   @import "../../assets/base.less";
 
-  #my,#user {
-
+  #my, #user {
     .user-info {
       display: grid;
       grid: auto auto / 80px 1fr;
-
       margin-top: 30px;
       padding-bottom: 20px;
       border-bottom: 1px solid #ebebeb;
@@ -122,7 +118,7 @@
 
     .item {
       display: grid;
-      grid: auto  auto auto / 80px 1fr;
+      grid: auto auto auto / 80px 1fr;
       margin: 20px 0;
 
       .date {
@@ -150,8 +146,8 @@
         grid-column: 2;
         grid-row: 2;
         margin-top: 0;
-        word-wrap:break-word;
-        word-break:break-all;
+        word-wrap: break-word;
+        word-break: break-all;
       }
 
       .actions {
@@ -164,27 +160,31 @@
         }
       }
     }
+
     .pagination {
       display: grid;
       justify-items: center;
       margin-bottom: 30px;
     }
-    .pagination{
-      .el-icon{
+
+    .pagination {
+      .el-icon {
         color: rgb(55, 49, 70);
+
         &:hover {
           color: #0acd0a;
         }
       }
-      .el-pager li{
-        &.active{
+
+      .el-pager li {
+        &.active {
           color: @themeColor;
         }
+
         &:hover {
           color: #0acd0a;
         }
       }
     }
-
   }
 </style>

@@ -4,19 +4,19 @@
     <main id="main">
       <router-view/>
     </main>
-    <Footer id="footer"></Footer>
+    <VFooter id="footer"></VFooter>
   </div>
 </template>
 
 <script>
   import Header from '@/components/header.vue'
-  import Footer from '@/components/footer.vue'
+  import Footer from '@/components/footers.vue'
 
   export default {
     name: 'App',
     components: {
       Header,
-      Footer
+      VFooter:Footer
     }
   }
 </script>

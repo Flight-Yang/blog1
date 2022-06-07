@@ -6,10 +6,10 @@
 
 
 <script>
+export  default {
+  name:'footers'
+}
 
-  export default {
-    name: 'footer'
-  }
 </script>
 
 <style scoped>

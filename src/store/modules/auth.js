@@ -1,23 +1,26 @@
 import auth from '@/api/auth'
 
 const state = {
-  user: null,
-  isLogin: false
+  user:  null,
+  isLogin: false,
 }
 
 const getters = {
   user: state => state.user,
-  isLogin: state => state.isLogin
+  isLogin: state => state.isLogin,
 }
 
 const mutations = {
   setUser(state, payload) {
     state.user = payload.user
+    localStorage.setItem('userid',payload.user.id)
   },
 
   setLogin(state, payload) {
     state.isLogin = payload.isLogin
-  }
+  },
+
+
 }
 
 const actions = {
