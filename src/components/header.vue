@@ -46,9 +46,11 @@
         'checkLogin',
         'logout'
       ]),
-      onLogout(){
+     onLogout(){
         this.logout()
         localStorage.clear();
+        this.$router.push({path: "/"})
+        location.reload();
       }
     }
 

@@ -58,7 +58,8 @@ const router = new Router({
       // 设置默认路径
       path: "/",
       // Index为首页
-      component: () => import("../pages/Index/template.vue")
+      component: () => import("../pages/Index/template.vue"),
+      meta: { requireAuth: true }
     },
     {
       path: "/login",
